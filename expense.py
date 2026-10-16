@@ -1,6 +1,8 @@
 # expense.py
 
 import re
+import uuid
+from datetime import datetime
 
 # ---------- 可照抄区：分类表 ----------
 # 结构：分类 -> 关键词列表。想加词，只改这里，不用碰下面的逻辑。
@@ -11,6 +13,22 @@ CATEGORY_KEYWORDS = {
     "购物": ["买书", "买衣服", "超市", "快递"],
 }
 
+def now_iso():
+    return datetime.now().isoformat(timespec="seconds")
+
+def new_id():
+    return uuid.uuid4().hex[:8]
+
+def new_record(text):
+    amount = parse_amount(text)
+    if amount is None:
+        raise ValueError(f"没找到金额：{text!r}")
+    return{
+        "id":new_id(),
+        "created_at":now_iso(),
+        "amount":amount,
+        "category":match_category(text),
+    }
 
 # ---------- 填空区 1：金额 ----------
 def parse_amount(text):

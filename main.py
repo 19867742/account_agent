@@ -1,14 +1,17 @@
 # main.py（新文件）—— 程序的入口
 import sys
-from expense import parse_expense
+
+from expense import new_record  # 不再是 parse_expense
 from storage import load_expenses, save_expenses
 
+
 def cmd_add(text):
-    record = parse_expense(text)         # 洞 D：拿到字典
+    record = new_record(text)            # ← 一行拿到完整记录
     expenses = load_expenses()
-    expenses.append(record)              # 洞 E：追加一笔
-    save_expenses(expenses)              # 洞 F：写回文件
+    expenses.append(record)
+    save_expenses(expenses)
     print("已记账：", record)
+
 
 def cmd_list():
     expenses = load_expenses()

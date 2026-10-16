@@ -1,7 +1,8 @@
 # storage.py（新文件）
 import json
+import os
 
-FILENAME = "expenses.json"
+FILENAME = os.path.join(os.path.dirname(__file__), "expenses.json")
 
 def load_expenses():
     """读账本。返回 list；文件不存在时返回空列表 []。"""
@@ -17,3 +18,7 @@ def save_expenses(expenses):
     with open(FILENAME, "w", encoding="utf-8") as f:
         # 洞 C：把 expenses 写进去，提示 json.dump(..., ensure_ascii=False, indent=2)
         json.dump(expenses, f, ensure_ascii=False, indent=2)
+        
+def expenses_path():
+    """返回账本文件的完整路径。"""
+    return FILENAME

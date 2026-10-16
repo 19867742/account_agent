@@ -2,6 +2,7 @@
 # 运行：python test_expense.py
 # 目的：验证 ①分类 ②金额 是否配对；顺带验证"坏输入"不会打垮程序
 import sys
+
 sys.stdout.reconfigure(encoding="utf-8")   # 让控制台按 UTF-8 输出
 
 from expense import parse_expense
