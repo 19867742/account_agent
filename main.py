@@ -1,0 +1,35 @@
+# main.py（新文件）—— 程序的入口
+import sys
+from expense import parse_expense
+from storage import load_expenses, save_expenses
+
+def cmd_add(text):
+    record = parse_expense(text)         # 洞 D：拿到字典
+    expenses = load_expenses()
+    expenses.append(record)              # 洞 E：追加一笔
+    save_expenses(expenses)              # 洞 F：写回文件
+    print("已记账：", record)
+
+def cmd_list():
+    expenses = load_expenses()
+    if not expenses:
+        print("还没有任何记录")
+        return
+    # 洞 G：遍历 expenses 打印每一笔，最后打印总笔数和总金额
+    total = sum(e["amount"] for e in expenses)
+    # 提示：total = sum(e["amount"] for e in expenses)
+    for e in expenses:
+        print(f'{e["category"]}  {e["amount"]}')
+    total = sum(e["amount"] for e in expenses)
+    print(f"\n共 {len(expenses)} 笔，合计 {total}")
+
+if __name__ == "__main__":
+    # 用法：python main.py add "午饭 25"
+    #       python main.py list
+    command = sys.argv[1]                # 洞 H：读命令行动作（add / list）
+    if command == "add":
+        cmd_add(sys.argv[2])             # 洞 I：把第 3 个参数当记账句子
+    elif command == "list":
+        cmd_list()
+    else:
+        print("用法：python main.py add \"午饭 25\"  |  python main.py list")
