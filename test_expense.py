@@ -35,8 +35,7 @@ if __name__ == "__main__":
             got = parse_expense(text)
             cat_ok = got.get("category") == want_cat
             amt_ok = got.get("amount") == want_amt
-        except Exception as e:
-            # 抛错本身也可能是"正确行为"（比如无金额那句）
+        except Exception as e:       # noqa: BLE001 —— 测试立场：任何抛错都算失败
             cat_ok = amt_ok = (want_amt is None)
             got = f"抛错: {type(e).__name__}: {e}"
 
