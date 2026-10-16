@@ -19,8 +19,8 @@ def parse_amount(text):
     """
     m = re.search(r"\d+(?:\.\d+)?", text)
     # 洞 1：用 re.search 匹配数字（支持小数），提示 r"\d+(?:\.\d+)?"
-    if m is not None:
-        m = None
+    if m is None:
+        return None
     # 洞 2：如果没匹配到 → return None
     return float(m.group())
     # 洞 3：匹配到了 → return float(...)，注意要用 .group() 取文本
