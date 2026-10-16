@@ -16,7 +16,6 @@ def cmd_list():
         print("还没有任何记录")
         return
     # 洞 G：遍历 expenses 打印每一笔，最后打印总笔数和总金额
-    total = sum(e["amount"] for e in expenses)
     # 提示：total = sum(e["amount"] for e in expenses)
     for e in expenses:
         print(f'{e["category"]}  {e["amount"]}')
@@ -24,12 +23,17 @@ def cmd_list():
     print(f"\n共 {len(expenses)} 笔，合计 {total}")
 
 if __name__ == "__main__":
-    # 用法：python main.py add "午饭 25"
-    #       python main.py list
-    command = sys.argv[1]                # 洞 H：读命令行动作（add / list）
+    if len(sys.argv) < 2:                # 先检查"够不够用"
+        print('用法：py main.py add "午饭 25"  |  py main.py list')
+        sys.exit(1)                      # 1 = 非正常退出
+    command = sys.argv[1]
     if command == "add":
-        cmd_add(sys.argv[2])             # 洞 I：把第 3 个参数当记账句子
+        if len(sys.argv) < 3:            # add 还需要一句话
+            print('用法：py main.py add "午饭 25"')
+            sys.exit(1)
+        cmd_add(sys.argv[2])
     elif command == "list":
         cmd_list()
     else:
-        print("用法：python main.py add \"午饭 25\"  |  python main.py list")
+        print(f"未知命令：{command}")
+        sys.exit(1)
