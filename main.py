@@ -1,16 +1,20 @@
-# main.py（新文件）—— 程序的入口
 import sys
 
-from expense import new_record  # 不再是 parse_expense
+from expense import new_record
 from storage import load_expenses, save_expenses
 
 
+def format_record(rec: dict) -> str:
+    sign = "-" if rec["amount"] < 0 else "+"
+    return f"{rec['category']} {sign}{abs(rec['amount']):.2f} 元  #{rec['id'][:8]}"
+
+
 def cmd_add(text):
-    record = new_record(text)            # ← 一行拿到完整记录
+    record = new_record(text) 
     expenses = load_expenses()
     expenses.append(record)
     save_expenses(expenses)
-    print("已记账：", record)
+    print("已记账：" + format_record(record))
 
 
 def cmd_list():
@@ -18,12 +22,11 @@ def cmd_list():
     if not expenses:
         print("还没有任何记录")
         return
-    # 洞 G：遍历 expenses 打印每一笔，最后打印总笔数和总金额
-    # 提示：total = sum(e["amount"] for e in expenses)
     for e in expenses:
-        print(f'{e["id"]} {e["category"]}  {e["amount"]}')
+        print(format_record(e))
     total = sum(e["amount"] for e in expenses)
     print(f"\n共 {len(expenses)} 笔，合计 {total}")
+
 
 def cmd_remove(expense_id):
     expenses = load_expenses()
@@ -35,13 +38,14 @@ def cmd_remove(expense_id):
     print(f"已删除 1 笔，剩余 {len(rest)} 笔")
     return True
 
+
 if __name__ == "__main__":
-    if len(sys.argv) < 2:                # 先检查"够不够用"
+    if len(sys.argv) < 2:          
         print('用法：py main.py add "午饭 25"  |  py main.py list')
-        sys.exit(1)                      # 1 = 非正常退出
+        sys.exit(1)               
     command = sys.argv[1]
     if command == "add":
-        if len(sys.argv) < 3:            # add 还需要一句话
+        if len(sys.argv) < 3:        
             print('用法：py main.py add "午饭 25"')
             sys.exit(1)
         cmd_add(sys.argv[2])
