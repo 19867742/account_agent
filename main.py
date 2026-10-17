@@ -48,7 +48,7 @@ if __name__ == "__main__":
         if len(sys.argv) < 3:        
             print('用法：py main.py add "午饭 25"')
             sys.exit(1)
-        cmd_add(sys.argv[2])
+        cmd_add(" ".join(sys.argv[2:]))
     elif command == "list":
         cmd_list()
     elif command == "remove":
